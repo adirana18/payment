@@ -9,11 +9,12 @@
 <body>
     <div class="container">
         <h1>INVOICE</h1>
-        <div class="invoice-details" id="invoiceDetails">
-            <!-- Data invoice seperti nomor dan tanggal akan dimasukkan di sini -->
+        <div class="invoice-details">
+            <p>No: <span id="invoiceNumber"></span></p>
+            <p><span id="invoiceDate"></span></p>
         </div>
-
-        <table class="invoice-table" id="invoiceTable">
+        
+        <table class="invoice-table">
             <thead>
                 <tr>
                     <th>DESCRIPTION</th>
@@ -27,68 +28,35 @@
                 <!-- Data tabel invoice akan dimasukkan di sini -->
             </tbody>
         </table>
+        
+        <iframe id="invoiceData" src="invoice_data.txt" style="display: none;"></iframe>
 
-        <div class="payment-options">
-            <div class="payment-option">
-                <img src="asset/bca.webp" alt="BCA">
-                <span>7115461869</span>
-                <button onclick="copyToClipboard('7115461869')">Copy</button>
-            </div>
-            <div class="payment-option">
-                <img src="asset/mandiri.webp" alt="Mandiri">
-                <span>1220011176867</span>
-                <button onclick="copyToClipboard('1220011176867')">Copy</button>
-            </div>
-            <div class="payment-option">
-                <img src="asset/bri.png" alt="BRI">
-                <span>373101020767531</span>
-                <button onclick="copyToClipboard('373101020767531')">Copy</button>
-            </div>
-            <div class="payment-option">
-                <img src="asset/dompet-digital.png" alt="Other Payments">
-                <span>083816256254</span>
-                <button onclick="copyToClipboard('083816256254')">Copy</button>
-            </div>
-        </div>
+        <script>
+            // Ambil konten dari file teks yang dimuat dalam iframe
+            window.onload = function() {
+                var iframeContent = document.getElementById('invoiceData').contentWindow.document.body.textContent;
+                var lines = iframeContent.split('\n');
+
+                if (lines.length >= 3) {
+                    document.getElementById('invoiceNumber').innerText = lines[0].trim();
+                    document.getElementById('invoiceDate').innerText = lines[1].trim();
+                    
+                    var invoiceDetails = lines[2].split(',');
+                    var tableBody = document.getElementById('invoiceTableBody');
+                    var tableRow = document.createElement('tr');
+
+                    invoiceDetails.forEach(function(detail) {
+                        var tableData = document.createElement('td');
+                        tableData.textContent = detail.trim();
+                        tableRow.appendChild(tableData);
+                    });
+
+                    tableBody.appendChild(tableRow);
+                } else {
+                    console.error('Error loading invoice data.');
+                }
+            };
+        </script>
     </div>
-
-    <div id="invoiceData" style="display: none;">
-        <!-- Data dari file teks akan dimuat di sini menggunakan JavaScript -->
-    </div>
-
-    <script>
-      fetch('invoice_data.txt')
-    .then(response => response.text())
-    .then(data => {
-        const lines = data.split('\n');
-        const invoiceNumber = lines[0].trim();
-        const invoiceDate = lines[1].trim();
-        const invoiceDetails = lines[2].split(',');
-
-        // Masukkan nomor invoice dan tanggal
-        document.getElementById('invoiceDetails').innerHTML = `
-            <p>No: ${invoiceNumber}</p>
-            <p>${invoiceDate}</p>
-        `;
-
-        // Masukkan data tabel invoice
-        const tableBody = document.getElementById('invoiceTableBody');
-        let tableRows = '';
-        for (let i = 0; i < invoiceDetails.length; i += 5) {
-            tableRows += `
-                <tr>
-                    <td>${invoiceDetails[i]}</td>
-                    <td>${invoiceDetails[i+1]}</td>
-                    <td>${invoiceDetails[i+2]}</td>
-                    <td>${invoiceDetails[i+3]}</td>
-                    <td>${invoiceDetails[i+4]}</td>
-                </tr>
-            `;
-        }
-        tableBody.innerHTML = tableRows;
-    })
-    .catch(error => console.error('Error loading invoice data:', error));
-
-    </script>
 </body>
 </html>
