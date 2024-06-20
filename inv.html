@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INVOICE</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>INVOICE</h1>
+        <div class="invoice-details" id="invoiceDetails">
+            <!-- Data invoice seperti nomor dan tanggal akan dimasukkan di sini -->
+        </div>
+
+        <table class="invoice-table" id="invoiceTable">
+            <thead>
+                <tr>
+                    <th>DESCRIPTION</th>
+                    <th>PRICE</th>
+                    <th>DISCOUNT</th>
+                    <th>TOTAL EXCL. VAT</th>
+                    <th>VAT AMOUNT (IDR)</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceTableBody">
+                <!-- Data tabel invoice akan dimasukkan di sini -->
+            </tbody>
+        </table>
+
+        <div class="payment-options">
+            <div class="payment-option">
+                <img src="asset/bca.webp" alt="BCA">
+                <span>7115461869</span>
+                <button onclick="copyToClipboard('7115461869')">Copy</button>
+            </div>
+            <div class="payment-option">
+                <img src="asset/mandiri.webp" alt="Mandiri">
+                <span>1220011176867</span>
+                <button onclick="copyToClipboard('1220011176867')">Copy</button>
+            </div>
+            <div class="payment-option">
+                <img src="asset/bri.png" alt="BRI">
+                <span>373101020767531</span>
+                <button onclick="copyToClipboard('373101020767531')">Copy</button>
+            </div>
+            <div class="payment-option">
+                <img src="asset/dompet-digital.png" alt="Other Payments">
+                <span>083816256254</span>
+                <button onclick="copyToClipboard('083816256254')">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="invoiceData" style="display: none;">
+        <!-- Data dari file teks akan dimuat di sini menggunakan JavaScript -->
+    </div>
+
+    <script>
+      fetch('invoice_data.txt')
+    .then(response => response.text())
+    .then(data => {
+        const lines = data.split('\n');
+        const invoiceNumber = lines[0].trim();
+        const invoiceDate = lines[1].trim();
+        const invoiceDetails = lines[2].split(',');
+
+        // Masukkan nomor invoice dan tanggal
+        document.getElementById('invoiceDetails').innerHTML = `
+            <p>No: ${invoiceNumber}</p>
+            <p>${invoiceDate}</p>
+        `;
+
+        // Masukkan data tabel invoice
+        const tableBody = document.getElementById('invoiceTableBody');
+        let tableRows = '';
+        for (let i = 0; i < invoiceDetails.length; i += 5) {
+            tableRows += `
+                <tr>
+                    <td>${invoiceDetails[i]}</td>
+                    <td>${invoiceDetails[i+1]}</td>
+                    <td>${invoiceDetails[i+2]}</td>
+                    <td>${invoiceDetails[i+3]}</td>
+                    <td>${invoiceDetails[i+4]}</td>
+                </tr>
+            `;
+        }
+        tableBody.innerHTML = tableRows;
+    })
+    .catch(error => console.error('Error loading invoice data:', error));
+
+    </script>
+</body>
+</html>

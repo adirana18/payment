@@ -49,3 +49,33 @@ h1 {
 .payment-option button:hover {
     background-color: #003a70;
 }
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.invoice-table th, .invoice-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+.invoice-table th {
+    background-color: #0051A2;
+    border-radius: 12px;
+}
+.total-row {
+    font-weight: bold;
+}
