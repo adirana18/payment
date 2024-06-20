@@ -79,3 +79,14 @@ body {
 .total-row {
     font-weight: bold;
 }
+
+/* Tambahkan CSS berikut di dalam file styles.css */
+@media (max-width: 600px) {
+    .invoice-table th, .invoice-table td {
+        padding: 6px; /* Mengurangi padding agar muat di layar kecil */
+        font-size: 0.8em; /* Mengurangi ukuran font untuk tampilan lebih kompak */
+    }
+    .invoice-table th {
+        font-size: 0.9em; /* Ukuran font sedikit lebih besar untuk header */
+    }
+}
